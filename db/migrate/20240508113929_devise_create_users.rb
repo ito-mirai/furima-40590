@@ -6,6 +6,12 @@ class DeviseCreateUsers < ActiveRecord::Migration[7.0]
       ## Database authenticatable
       t.string :email,              null: false, default: ""
       t.string :encrypted_password, null: false, default: ""
+      t.string :nickname,           null: false, default: ""
+      t.string :f_name,             null: false, default: ""
+      t.string :p_name,             null: false, default: ""
+      t.string :f_name_kana,        null: false, default: ""
+      t.string :p_name_kana,        null: false, default: ""
+      t.date :birthday,             null: false, default: "2000-01-01" #デフォルト値空白でマイグレーションしたところエラーが発生した。厳密な形式が必要という情報があったため特定のデフォルト値を設定。
 
       ## Recoverable
       t.string   :reset_password_token
