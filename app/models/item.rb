@@ -15,6 +15,7 @@ class Item < ApplicationRecord
   validates :ship_load, numericality: { other_than: 1 } 
   validates :prefecture, numericality: { other_than: 1 } 
   validates :ship_day, numericality: { other_than: 1 } 
-  validates :price, presence: true
+  validates :price, numericality: { in: 300..9999999 }
+  validates :price, format: { with: /^[0-9]+$/ }
 
 end
