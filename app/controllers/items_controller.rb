@@ -1,10 +1,9 @@
 class ItemsController < ApplicationController
-
-  #ログインしていないとき、ログインページへ遷移する
+  # ログインしていないとき、ログインページへ遷移する
   before_action :move_to_sign_in, only: :new
 
   def index
-    @items = Item.all.order("created_at DESC")
+    @items = Item.all.order('created_at DESC')
   end
 
   def new
@@ -25,14 +24,13 @@ class ItemsController < ApplicationController
   def item_params
     params
       .require(:item)
-      .permit(:image, :name, :description, :category_id, :quality_id, :ship_load_id, :prefecture_id, :ship_day_id, :price )
+      .permit(:image, :name, :description, :category_id, :quality_id, :ship_load_id, :prefecture_id, :ship_day_id, :price)
       .merge(user_id: current_user.id)
   end
 
   def move_to_sign_in
-    unless user_signed_in?
-      redirect_to new_user_session_path
-    end
-  end
+    return if user_signed_in?
 
+    redirect_to new_user_session_path
+  end
 end
