@@ -1,4 +1,4 @@
-function post (){
+function price_calculation (){
 
   //各HTML要素を取得
   const item_price = document.getElementById("item-price")
@@ -25,4 +25,4 @@ function post (){
   })
 }
 
-window.addEventListener('turbo:load', post);
+window.addEventListener('turbo:load', price_calculation);
