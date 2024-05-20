@@ -1,6 +1,12 @@
 class ItemsController < ApplicationController
+  # ＠itemに対して特定のitemレコードを代入
+  before_action :item_find, only: [:show, :edit, :update]
+
   # ログインしていないとき、ログインページへ遷移する
-  before_action :move_to_sign_in, only: :new
+  before_action :move_to_sign_in, only: [:new, :edit]
+
+  # 操作権がないとき、トップページへ遷移する
+  before_action :move_to_index, only: :edit
 
   def index
     @items = Item.all.order('created_at DESC')
@@ -20,7 +26,17 @@ class ItemsController < ApplicationController
   end
 
   def show
-    @item = Item.find(params[:id])
+  end
+
+  def edit
+  end
+
+  def update
+    if @item.update(item_params)
+      redirect_to item_path(params[:id])
+    else
+      render :edit, status: :unprocessable_entity
+    end
   end
 
   private
@@ -32,9 +48,20 @@ class ItemsController < ApplicationController
       .merge(user_id: current_user.id)
   end
 
+  def item_find
+    @item = Item.find(params[:id])
+  end
+
   def move_to_sign_in
     return if user_signed_in?
 
     redirect_to new_user_session_path
   end
+
+  def move_to_index
+    return if current_user == @item.user
+
+    redirect_to root_path
+  end
+
 end
