@@ -26,3 +26,4 @@ function price_calculation (){
 }
 
 window.addEventListener('turbo:load', price_calculation);
+window.addEventListener('turbo:render', price_calculation);
