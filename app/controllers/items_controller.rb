@@ -1,12 +1,12 @@
 class ItemsController < ApplicationController
+  # ＠itemに対して特定のitemレコードを代入
+  before_action :item_find, only: [:show, :edit, :update]
+
   # ログインしていないとき、ログインページへ遷移する
   before_action :move_to_sign_in, only: [:new, :edit]
 
   # 操作権がないとき、トップページへ遷移する
   before_action :move_to_index, only: :edit
-
-  # ＠itemに対して特定のitemレコードを代入
-  before_action :item_find, only: [:show, :edit, :update]
 
   def index
     @items = Item.all.order('created_at DESC')
@@ -48,6 +48,10 @@ class ItemsController < ApplicationController
       .merge(user_id: current_user.id)
   end
 
+  def item_find
+    @item = Item.find(params[:id])
+  end
+
   def move_to_sign_in
     return if user_signed_in?
 
@@ -55,13 +59,9 @@ class ItemsController < ApplicationController
   end
 
   def move_to_index
-    return if current_user == Item.find(params[:id]).user
+    return if current_user == @item.user
 
     redirect_to root_path
-  end
-
-  def item_find
-    @item = Item.find(params[:id])
   end
 
 end
