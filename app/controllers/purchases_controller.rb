@@ -15,6 +15,7 @@ class PurchasesController < ApplicationController
   def create
     @purchase_delivery = PurchaseDelivery.new(purchase_delivery_params)
       if @purchase_delivery.valid?
+        pay_item
         @purchase_delivery.save
         redirect_to root_path
       else
@@ -28,7 +29,7 @@ class PurchasesController < ApplicationController
     params
       .require(:purchase_delivery)
       .permit(:post_code, :prefecture_id, :municipality, :address, :building, :telephone)
-      .merge(user_id: current_user.id, item_id: params[:item_id])
+      .merge(token: params[:token], user_id: current_user.id, item_id: params[:item_id])
   end
 
   def item_find
@@ -45,6 +46,15 @@ class PurchasesController < ApplicationController
     if (current_user == @item.user) || ( !@item.purchase.nil? )
       redirect_to root_path
     end
+  end
+
+  def pay_item
+    Payjp.api_key = "sk_test_4f7a96b84d7e6f81314aa12a"  # 自身のPAY.JPテスト秘密鍵を記述しましょう
+    Payjp::Charge.create(
+      amount: @item.price,                    # 商品の値段
+      card: purchase_delivery_params[:token], # カードトークン
+      currency: 'jpy'                         # 通貨の種類（日本円）
+    )
   end
 
 end

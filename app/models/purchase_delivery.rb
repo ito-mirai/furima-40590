@@ -1,8 +1,9 @@
 class PurchaseDelivery
   include ActiveModel::Model
-  attr_accessor :user_id, :item_id, :post_code, :prefecture_id, :municipality, :address, :building, :telephone, :purchase_id
+  attr_accessor :token, :user_id, :item_id, :post_code, :prefecture_id, :municipality, :address, :building, :telephone, :purchase_id
   
   with_options presence: do
+    validates :token
     validates :user_id
     validates :item_id
     validates :post_code, format: /\A[0-9]{3}-[0-9]{4}\z/
