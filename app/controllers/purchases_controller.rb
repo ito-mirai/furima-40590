@@ -14,13 +14,13 @@ class PurchasesController < ApplicationController
 
   def create
     @purchase_delivery = PurchaseDelivery.new(purchase_delivery_params)
-      if @purchase_delivery.valid?
-        pay_item
-        @purchase_delivery.save
-        redirect_to root_path
-      else
-        render :index, status: :unprocessable_entity
-      end
+    if @purchase_delivery.valid?
+      pay_item
+      @purchase_delivery.save
+      redirect_to root_path
+    else
+      render :index, status: :unprocessable_entity
+    end
   end
 
   private
@@ -43,18 +43,17 @@ class PurchasesController < ApplicationController
   end
 
   def move_to_index
-    if (current_user == @item.user) || ( !@item.purchase.nil? )
-      redirect_to root_path
-    end
+    return unless (current_user == @item.user) || !@item.purchase.nil?
+
+    redirect_to root_path
   end
 
   def pay_item
-    Payjp.api_key = "sk_test_4f7a96b84d7e6f81314aa12a"  # 自身のPAY.JPテスト秘密鍵を記述しましょう
+    Payjp.api_key = 'sk_test_4f7a96b84d7e6f81314aa12a' # 自身のPAY.JPテスト秘密鍵を記述しましょう
     Payjp::Charge.create(
       amount: @item.price,                    # 商品の値段
       card: purchase_delivery_params[:token], # カードトークン
       currency: 'jpy'                         # 通貨の種類（日本円）
     )
   end
-
 end
