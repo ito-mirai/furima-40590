@@ -8,6 +8,9 @@ class ItemsController < ApplicationController
   # 操作権がないとき、トップページへ遷移する
   before_action :move_to_index, only: [:edit, :destroy]
 
+  # 売買済みのとき、トップページへ遷移する
+  before_action :sold_out, only: :edit
+
   def index
     @items = Item.all.order('created_at DESC')
   end
@@ -68,4 +71,11 @@ class ItemsController < ApplicationController
 
     redirect_to root_path
   end
+
+  def sold_out
+    return if @item.purchase.nil?
+
+    redirect_to root_path
+  end
+
 end
