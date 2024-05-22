@@ -9,6 +9,7 @@ class PurchasesController < ApplicationController
   before_action :move_to_index
 
   def index
+    gon.public_key = ENV["PAYJP_PUBLIC_KEY"]
     @purchase_delivery = PurchaseDelivery.new
   end
 
@@ -49,7 +50,7 @@ class PurchasesController < ApplicationController
   end
 
   def pay_item
-    Payjp.api_key = 'sk_test_4f7a96b84d7e6f81314aa12a' # 自身のPAY.JPテスト秘密鍵を記述しましょう
+    Payjp.api_key = ENV["PAYJP_SECRET_KEY"] # PAY.JPテスト秘密鍵
     Payjp::Charge.create(
       amount: @item.price,                    # 商品の値段
       card: purchase_delivery_params[:token], # カードトークン
