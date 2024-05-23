@@ -3,10 +3,13 @@ class ItemsController < ApplicationController
   before_action :item_find, only: [:show, :edit, :update, :destroy]
 
   # ログインしていないとき、ログインページへ遷移する
-  before_action :move_to_sign_in, only: [:new, :edit, :destroy]
+  before_action :authenticate_user!, only: [:new, :edit, :destroy]
 
   # 操作権がないとき、トップページへ遷移する
   before_action :move_to_index, only: [:edit, :destroy]
+
+  # 売買済みのとき、トップページへ遷移する
+  before_action :sold_out, only: :edit
 
   def index
     @items = Item.all.order('created_at DESC')
@@ -57,14 +60,14 @@ class ItemsController < ApplicationController
     @item = Item.find(params[:id])
   end
 
-  def move_to_sign_in
-    return if user_signed_in?
-
-    redirect_to new_user_session_path
-  end
-
   def move_to_index
     return if current_user == @item.user
+
+    redirect_to root_path
+  end
+
+  def sold_out
+    return if @item.purchase.nil?
 
     redirect_to root_path
   end
