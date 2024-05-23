@@ -9,7 +9,7 @@ class PurchasesController < ApplicationController
   before_action :move_to_index
 
   def index
-    gon.public_key = ENV["PAYJP_PUBLIC_KEY"]
+    gon.public_key = ENV['PAYJP_PUBLIC_KEY']
     @purchase_delivery = PurchaseDelivery.new
   end
 
@@ -20,7 +20,7 @@ class PurchasesController < ApplicationController
       @purchase_delivery.save
       redirect_to root_path
     else
-      gon.public_key = ENV["PAYJP_PUBLIC_KEY"]
+      gon.public_key = ENV['PAYJP_PUBLIC_KEY']
       render :index, status: :unprocessable_entity
     end
   end
@@ -51,7 +51,7 @@ class PurchasesController < ApplicationController
   end
 
   def pay_item
-    Payjp.api_key = ENV["PAYJP_SECRET_KEY"] # PAY.JPテスト秘密鍵
+    Payjp.api_key = ENV['PAYJP_SECRET_KEY'] # PAY.JPテスト秘密鍵
     Payjp::Charge.create(
       amount: @item.price,                    # 商品の値段
       card: purchase_delivery_params[:token], # カードトークン

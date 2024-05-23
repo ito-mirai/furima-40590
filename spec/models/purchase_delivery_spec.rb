@@ -1,7 +1,6 @@
 require 'rails_helper'
 
 RSpec.describe PurchaseDelivery, type: :model do
-
   before do
     user = FactoryBot.create(:user)
     item = FactoryBot.create(:item)
@@ -9,7 +8,7 @@ RSpec.describe PurchaseDelivery, type: :model do
     sleep 0.1
   end
 
-#処理時間
+  # 処理時間
 
   context '商品購入機能' do
     describe '正常系' do
@@ -39,19 +38,19 @@ RSpec.describe PurchaseDelivery, type: :model do
         expect(@order.errors.full_messages).to include("Token can't be blank")
       end
       it '郵便番号が入力されていない' do
-        @order.post_code = ""
+        @order.post_code = ''
         @order.valid?
         expect(@order.errors.full_messages).to include("Post code can't be blank")
       end
       it '郵便番号にハイフンが含まれてない' do
-        @order.post_code = "1234567"
+        @order.post_code = '1234567'
         @order.valid?
-        expect(@order.errors.full_messages).to include("Post code is invalid")
+        expect(@order.errors.full_messages).to include('Post code is invalid')
       end
       it '郵便番号に全角文字列が含まれている' do
-        @order.post_code = "１２３-４５６７"
+        @order.post_code = '１２３-４５６７'
         @order.valid?
-        expect(@order.errors.full_messages).to include("Post code is invalid")
+        expect(@order.errors.full_messages).to include('Post code is invalid')
       end
       it '都道府県が選択されてない' do
         @order.prefecture_id = nil
@@ -61,46 +60,45 @@ RSpec.describe PurchaseDelivery, type: :model do
       it '都道府県で「---」が選択されている' do
         @order.prefecture_id = 1
         @order.valid?
-        expect(@order.errors.full_messages).to include("Prefecture must be other than 1")
+        expect(@order.errors.full_messages).to include('Prefecture must be other than 1')
       end
       it '市区町村が入力されてない' do
-        @order.municipality = ""
+        @order.municipality = ''
         @order.valid?
         expect(@order.errors.full_messages).to include("Municipality can't be blank")
       end
       it '番地が入力されていない' do
-        @order.address = ""
+        @order.address = ''
         @order.valid?
         expect(@order.errors.full_messages).to include("Address can't be blank")
       end
       it '電話番号が入力されていない' do
-        @order.telephone = ""
+        @order.telephone = ''
         @order.valid?
         expect(@order.errors.full_messages).to include("Telephone can't be blank")
       end
       it '電話番号が9桁以下になっている' do
-        @order.telephone = "000111222"
+        @order.telephone = '000111222'
         @order.valid?
-        expect(@order.errors.full_messages).to include("Telephone is invalid")
+        expect(@order.errors.full_messages).to include('Telephone is invalid')
       end
       it '電話番号が12桁以上になっている' do
-        @order.telephone = "000111222333"
+        @order.telephone = '000111222333'
         @order.valid?
-        expect(@order.errors.full_messages).to include("Telephone is invalid")
+        expect(@order.errors.full_messages).to include('Telephone is invalid')
       end
       it '電話番号にハイフンが含まれている' do
-        @order.telephone = "000-1111-2222"
+        @order.telephone = '000-1111-2222'
         @order.valid?
-        expect(@order.errors.full_messages).to include("Telephone is invalid")
+        expect(@order.errors.full_messages).to include('Telephone is invalid')
       end
       it '電話番号に全角文字列が入力されている' do
-        @order.telephone = "０００１１１１２２２２"
+        @order.telephone = '０００１１１１２２２２'
         @order.valid?
-        expect(@order.errors.full_messages).to include("Telephone is invalid")
+        expect(@order.errors.full_messages).to include('Telephone is invalid')
       end
     end
   end
-
 end
 
 RSpec.configure do |config|
