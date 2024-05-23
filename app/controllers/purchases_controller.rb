@@ -3,7 +3,7 @@ class PurchasesController < ApplicationController
   before_action :item_find
 
   # ログインしていないとき、ログインページへ遷移する
-  before_action :move_to_sign_in
+  before_action :authenticate_user!
 
   # 購入不可のとき、トップページへ遷移する
   before_action :move_to_index
@@ -36,12 +36,6 @@ class PurchasesController < ApplicationController
 
   def item_find
     @item = Item.find(params[:item_id])
-  end
-
-  def move_to_sign_in
-    return if user_signed_in?
-
-    redirect_to new_user_session_path
   end
 
   def move_to_index
